@@ -1,0 +1,46 @@
+<!-- frontend/register.html -->
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Register - Foodify</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <header><div class="brand">Foodify</div></header>
+  <main class="container">
+    <div class="card">
+      <h2>Signup</h2>
+      <input id="name" placeholder="Name" />
+      <input id="email" placeholder="Email" />
+      <input id="password" type="password" placeholder="Password" />
+      <button id="signupBtn" class="btn">Signup</button>
+      <p>Already have an account? <a href="login.html">Login</a></p>
+      <div id="msg"></div>
+    </div>
+  </main>
+
+  <script>
+    const API = 'http://localhost:5000/api';
+    document.getElementById('signupBtn').addEventListener('click', async () => {
+      const name = document.getElementById('name').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value.trim();
+      const res = await fetch(`${API}/auth/signup`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, email, password })
+      });
+      const data = await res.json();
+      if (res.ok) {
+        localStorage.setItem('token', data.token);
+        localStorage.setItem('user', JSON.stringify(data.user));
+        window.location.href = 'menu.html';
+      } else {
+        document.getElementById('msg').innerText = data.message || 'Signup failed';
+      }
+    });
+  </script>
+</body>
+</html>

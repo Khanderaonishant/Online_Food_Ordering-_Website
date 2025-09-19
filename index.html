@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Foodify - Online Food Ordering</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- Navbar -->
+  <header>
+    <nav>
+      <h1 class="logo">🍔 Foodify</h1>
+      <ul>
+        <li><a href="#">Menu</a></li>
+        <li><a href="#">Cart</a></li>
+        <li><a href="#">My Orders</a></li>
+        <li><a href="#" class="login-btn">Login</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-text">
+      <h2>Delicious Food, Delivered Fast 🍽️</h2>
+      <p>Order from a variety of dishes — pizza, burgers, pasta and more. Fresh, hot, and right at your doorstep.</p>
+      <button id="orderNow" class="cta-btn">Order Now</button>
+    </div>
+    <div class="hero-img">
+      <img src="https://i.ibb.co/8gW6Gwc/food-banner.png" alt="Food Banner">
+    </div>
+  </section>
+
+  <!-- Menu Section (dynamic) -->
+  <section class="menu-section">
+    <h2>🍕 Our Menu</h2>
+    <p class="subtitle">Hand-picked meals specially made for you</p>
+    <div id="menu" class="menu-container">
+      <!-- JS will inject food items here -->
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <p>© 2025 Foodify | Crafted with ❤️ for food lovers</p>
+  </footer>
+
+  <script src="js/script.js"></script>
+</body>
+</html>

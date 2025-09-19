@@ -1,0 +1,44 @@
+<!-- frontend/login.html -->
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Login - Foodify</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <header><div class="brand">Foodify</div></header>
+  <main class="container">
+    <div class="card">
+      <h2>Login</h2>
+      <input id="email" placeholder="Email" />
+      <input id="password" type="password" placeholder="Password" />
+      <button id="loginBtn" class="btn">Login</button>
+      <p>Don't have an account? <a href="register.html">Signup</a></p>
+      <div id="msg"></div>
+    </div>
+  </main>
+
+  <script>
+    const API = 'http://localhost:5000/api';
+    document.getElementById('loginBtn').addEventListener('click', async () => {
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value.trim();
+      const res = await fetch(`${API}/auth/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password })
+      });
+      const data = await res.json();
+      if (res.ok) {
+        localStorage.setItem('token', data.token);
+        localStorage.setItem('user', JSON.stringify(data.user));
+        window.location.href = 'menu.html';
+      } else {
+        document.getElementById('msg').innerText = data.message || 'Login failed';
+      }
+    });
+  </script>
+</body>
+</html>

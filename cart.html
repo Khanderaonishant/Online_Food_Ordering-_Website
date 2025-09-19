@@ -1,0 +1,71 @@
+<!-- frontend/cart.html -->
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Cart - Foodify</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <header><div class="brand">Foodify</div></header>
+  <main class="container">
+    <h2>Your Cart</h2>
+    <div id="cartItems"></div>
+    <div class="cart-total">Total: ₹<span id="cartTotal">0</span></div>
+    <button id="placeOrderBtn" class="btn">Place Order</button>
+    <div id="msg"></div>
+  </main>
+
+  <script>
+    const API = 'http://localhost:5000/api';
+    function renderCart() {
+      const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+      const container = document.getElementById('cartItems');
+      container.innerHTML = '';
+      let total = 0;
+      cart.forEach(it => {
+        total += it.price * it.qty;
+        const div = document.createElement('div');
+        div.className = 'cart-item';
+        div.innerHTML = `${it.name} - ₹${it.price} x ${it.qty} <button data-id="${it.id}" class="removeBtn">Remove</button>`;
+        container.appendChild(div);
+      });
+      document.getElementById('cartTotal').innerText = total.toFixed(2);
+      document.querySelectorAll('.removeBtn').forEach(b => {
+        b.addEventListener('click', () => {
+          const id = Number(b.dataset.id);
+          let cart = JSON.parse(localStorage.getItem('cart') || '[]');
+          cart = cart.filter(c => c.id !== id);
+          localStorage.setItem('cart', JSON.stringify(cart));
+          renderCart();
+        });
+      });
+    }
+
+    document.getElementById('placeOrderBtn').addEventListener('click', async () => {
+      const token = localStorage.getItem('token');
+      if (!token) { alert('Please login first'); window.location.href = 'login.html'; return; }
+      const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+      if (cart.length === 0) { alert('Cart is empty'); return; }
+      const total = cart.reduce((s,i)=>s + i.price * i.qty, 0);
+      const res = await fetch(`${API}/orders`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+        body: JSON.stringify({ cart, total })
+      });
+      const data = await res.json();
+      if (res.ok) {
+        localStorage.removeItem('cart');
+        alert('Order placed successfully');
+        window.location.href = 'orders.html';
+      } else {
+        document.getElementById('msg').innerText = data.message || 'Error placing order';
+      }
+    });
+
+    // initial
+    renderCart();
+  </script>
+</body>
+</html>
